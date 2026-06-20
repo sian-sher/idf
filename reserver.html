@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taxi Parisien – Réserver</title>
+    <!-- La feuille de style est copiée depuis la page d'accueil pour assurer une cohérence visuelle -->
+    <style>
+        :root {
+            --nav-bg: #0d0d0d;
+            --nav-text: #ffffff;
+            --accent: #d4a419;
+            --accent-hover: #bf8f0f;
+            --form-bg: rgba(0,0,0,0.65);
+            --section-bg: #f8f8f8;
+            --card-bg: #ffffff;
+            --card-border: #e2e2e2;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        body {
+            color: var(--text-primary);
+            background: var(--section-bg);
+            line-height: 1.5;
+        }
+        nav {
+            background: var(--nav-bg);
+            color: var(--nav-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        nav .logo span.brand {
+            display: block;
+            font-size: 1.4rem;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav li {
+            position: relative;
+            font-size: 0.95rem;
+        }
+        nav li.active::after {
+            content: "";
+            position: absolute;
+            bottom: -0.3rem;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: var(--accent);
+        }
+        /* Style des liens de navigation : texte blanc non souligné */
+        nav ul li a {
+            color: var(--nav-text);
+            text-decoration: none;
+        }
+        nav ul li a:visited {
+            color: var(--nav-text);
+        }
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        nav .contact {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+        nav .contact .phone {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        nav .contact .account {
+            border: 1px solid var(--accent);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+        /* Section héros pour la réservation */
+        .reserve-hero {
+            position: relative;
+            color: #ffffff;
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: url('Tesla Model Y.png') center/cover no-repeat;
+        }
+        .reserve-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: brightness(0.8);
+        }
+        .reserve-hero .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+        }
+        .reserve-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .reserve-hero h1 strong {
+            color: var(--accent);
+        }
+        .reserve-hero p {
+            font-size: 1rem;
+            color: #e0e0e0;
+            margin-bottom: 1rem;
+        }
+        .reservation-section {
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+        .reservation-card {
+            background: var(--form-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            color: #ffffff;
+        }
+        .reservation-card form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .reservation-card label {
+            font-size: 0.75rem;
+            color: #bbbbbb;
+            margin-bottom: 0.2rem;
+        }
+        .reservation-card input,
+        .reservation-card select {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            font-size: 0.85rem;
+        }
+
+        /* Mise en évidence de la zone de dépôt lors du glisser-déposer */
+        #reserveConventionneUploads.dragover {
+            background: rgba(255,255,255,0.1);
+            border: 2px dashed var(--accent);
+        }
+        /* Liste des fichiers sélectionnés */
+        .file-list div {
+            margin-top: 0.2rem;
+            font-size: 0.75rem;
+            color: #cccccc;
+        }
+        .reservation-card .form-group {
+            position: relative;
+        }
+        .reservation-card .form-group .field-icon {
+            position: absolute;
+            left: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .reservation-card .form-group input,
+        .reservation-card .form-group select {
+            padding-left: 1.8rem;
+        }
+        .reservation-card .full-row {
+            grid-column: span 2;
+        }
+        .reservation-card button {
+            grid-column: span 2;
+            padding: 0.8rem;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .reservation-card button:hover {
+            background: var(--accent-hover);
+        }
+        .reservation-card .payment-info {
+            grid-column: span 2;
+            margin-top: 0.6rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #cccccc;
+        }
+/* Couleur des propositions dans les menus déroulants */
+select option {
+    color: #000;
+    background-color: #fff;
+}
+/* Texte gris dans les champs départ / arrivée */
+input::placeholder {
+    color: #ffffff;
+    opacity: 1;
+}
+/* Couleur des propositions dans les menus déroulants */
+select option {
+    color: #000;
+    background-color: #fff;
+}
+</style>
+    </style>
+</head>
+<body>
+    <!-- Navigation partagée -->
+    <nav>
+        <div class="logo">
+            <span class="brand">TAXI</span>
+            <span>Parisien</span>
+        </div>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li class="active"><a href="reserver.html">Réserver</a></li>
+            <li><a href="forfaits.html">Forfaits Aéroports</a></li>
+            <li><a href="conventionne.html">Transport conventionné</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="contact">
+            <div class="phone">06 87 26 00 46</div>
+        </div>
+    </nav>
+    <!-- Héros spécifique à la réservation -->
+    <section class="reserve-hero">
+        <div class="content">
+            <h1><span>Réservez votre</span> <strong>trajet</strong></h1>
+            <p>Choisissez l’heure, et le lieu pour votre prochaine course.</p>
+        </div>
+    </section>
+    <!-- Formulaire de réservation en pleine page -->
+    <section class="reservation-section">
+        <div class="reservation-card">
+            <form id="reserveForm">
+                <div class="form-group">
+                    <label for="reservePickup">Départ</label>
+                    <input type="text" id="reservePickup" name="reservePickup" placeholder="Adresse, gare, hôtel, aéroport…" required />
+                </div>
+                <div class="form-group">
+                    <label for="reserveDropoff">Arrivée</label>
+                    <input type="text" id="reserveDropoff" name="reserveDropoff" placeholder="Adresse, gare, hôtel, aéroport…" required />
+                </div>
+                <div class="form-group">
+                    <label for="reserveDate">Date</label>
+                    <input type="date" id="reserveDate" name="reserveDate" required />
+                </div>
+                <div class="form-group">
+                    <label for="reserveTime">Heure</label>
+                    <input type="time" id="reserveTime" name="reserveTime" required />
+                </div>
+                <div class="form-group">
+                    <label for="reservePassengers">Passagers</label>
+                    <input type="number" id="reservePassengers" name="reservePassengers" min="1" max="8" value="1" />
+                </div>
+                <div class="form-group">
+                    <label for="reserveVehicle">Type de véhicule</label>
+                    <select id="reserveVehicle" name="reserveVehicle">
+                        <option value="model-y">Tesla Model Y</option>
+			
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reserveReservationType">Type de réservation</label>
+                    <select id="reserveReservationType" name="reserveReservationType">
+                        <option value="none">Aller simple</option>
+                        <option value="immediate">Réservation immédiate (+4 €)</option>
+                        <option value="advance">Réservation à l’avance (+7 €)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reserveServiceType">Service</label>
+                    <select id="reserveServiceType" name="reserveServiceType">
+                        <option value="normal">Taxi classique</option>
+                        <option value="conventionne">Transport conventionné (TAP)</option>
+                    </select>
+                </div>
+                <div class="form-group full-row" id="reserveConventionneUploads" style="display:none;">
+                    <label>Pièces TAP</label>
+                    <input type="file" id="reserveBonTransport" name="reserveBonTransport" accept=".pdf,image/*" multiple />
+                    <!-- Liste des fichiers sélectionnés pour le transport conventionné -->
+                    <div id="reserveFileList" class="file-list"></div>
+                </div>
+                <div class="form-group full-row">
+                    <label for="reserveAirportOption">Forfait Aéroport (optionnel)</label>
+                    <select id="reserveAirportOption" name="reserveAirportOption">
+                        <option value="">Sélectionner un aéroport</option>
+                        <option value="cdg-rive-droite">CDG rive droite – 56 €</option>
+                        <option value="cdg-rive-gauche">CDG rive gauche – 65 €</option>
+                        <option value="orly-rive-droite">Orly rive droite – 45 €</option>
+                        <option value="orly-rive-gauche">Orly rive gauche – 36 €</option>
+                    </select>
+                </div>
+                <button type="submit">Valider la réservation →</button>
+                <div class="payment-info">
+                </div>
+            </form>
+        </div>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceSelect = document.getElementById('reserveServiceType');
+            const uploadsDiv = document.getElementById('reserveConventionneUploads');
+            serviceSelect.addEventListener('change', function() {
+                if (this.value === 'conventionne') {
+                    uploadsDiv.style.display = 'block';
+                } else {
+                    uploadsDiv.style.display = 'none';
+                }
+            });
+
+            // Gestion de la zone de dépôt et de la liste des fichiers pour le formulaire de réservation
+            const reserveInput = document.getElementById('reserveBonTransport');
+            const reserveList = document.getElementById('reserveFileList');
+            const reserveDropArea = document.getElementById('reserveConventionneUploads');
+            function updateReserveList(files) {
+                if (!files || files.length === 0) {
+                    reserveList.innerHTML = '';
+                    return;
+                }
+                const names = [];
+                for (let i = 0; i < files.length; i++) {
+                    names.push(`<div>${files[i].name}</div>`);
+                }
+                reserveList.innerHTML = names.join('');
+            }
+            if (reserveInput && reserveList && reserveDropArea) {
+                reserveInput.addEventListener('change', function() {
+                    updateReserveList(this.files);
+                });
+                reserveDropArea.addEventListener('dragover', function(e) {
+                    if (uploadsDiv.style.display !== 'none') {
+                        e.preventDefault();
+                        this.classList.add('dragover');
+                    }
+                });
+                reserveDropArea.addEventListener('dragleave', function() {
+                    this.classList.remove('dragover');
+                });
+                reserveDropArea.addEventListener('drop', function(e) {
+                    if (uploadsDiv.style.display !== 'none') {
+                        e.preventDefault();
+                        this.classList.remove('dragover');
+                        reserveInput.files = e.dataTransfer.files;
+                        updateReserveList(reserveInput.files);
+                    }
+                });
+            }
+            // Lors de la soumission du formulaire de réservation, envoyer un message via WhatsApp
+            document.getElementById('reserveForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Numéro WhatsApp du chauffeur au format international (sans + ni espaces)
+                const phone = '33687260046';
+                // Récupération des valeurs saisies
+                const pickup = document.getElementById('reservePickup').value.trim();
+                const dropoff = document.getElementById('reserveDropoff').value.trim();
+                const date = document.getElementById('reserveDate').value;
+                const time = document.getElementById('reserveTime').value;
+                const passengers = document.getElementById('reservePassengers').value;
+                const vehicle = document.getElementById('reserveVehicle').options[document.getElementById('reserveVehicle').selectedIndex].text;
+                const reservationType = document.getElementById('reserveReservationType').options[document.getElementById('reserveReservationType').selectedIndex].text;
+                const serviceType = document.getElementById('reserveServiceType').options[document.getElementById('reserveServiceType').selectedIndex].text;
+                const airportOption = document.getElementById('reserveAirportOption').options[document.getElementById('reserveAirportOption').selectedIndex].text;
+                // Construire le message avec des sauts de ligne pour une meilleure lisibilité
+                let message = `Bonjour, je souhaite réserver un taxi.\n`;
+                message += `Départ : ${pickup}\n`;
+                message += `Arrivée : ${dropoff}\n`;
+                message += `Date : ${date}\n`;
+                message += `Heure : ${time}\n`;
+                message += `Passagers : ${passengers}\n`;
+                message += `Véhicule : ${vehicle}\n`;
+                message += `Type de réservation : ${reservationType}\n`;
+                message += `Service : ${serviceType}`;
+                if (airportOption && airportOption !== 'Sélectionner un aéroport') {
+                    message += `\nForfait aéroport : ${airportOption}`;
+                }
+                if (serviceType.toLowerCase().includes('convention')) {
+                    message += `\n(Pièces TAP jointes séparément)`;
+                }
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
+                window.open(whatsappURL, '_blank');
+                this.reset();
+            });
+        });
+    </script>
+</body>
+</html>

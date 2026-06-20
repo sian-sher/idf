@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taxi Parisien – Transport conventionné</title>
+    <style>
+        :root {
+            --nav-bg: #0d0d0d;
+            --nav-text: #ffffff;
+            --accent: #d4a419;
+            --accent-hover: #bf8f0f;
+            --section-bg: #f8f8f8;
+            --card-bg: #ffffff;
+            --card-border: #e2e2e2;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        body {
+            color: var(--text-primary);
+            background: var(--section-bg);
+            line-height: 1.5;
+        }
+        nav {
+            background: var(--nav-bg);
+            color: var(--nav-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        nav .logo span.brand {
+            display: block;
+            font-size: 1.4rem;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav li {
+            position: relative;
+            font-size: 0.95rem;
+        }
+        nav li.active::after {
+            content: "";
+            position: absolute;
+            bottom: -0.3rem;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: var(--accent);
+        }
+        /* Style des liens de navigation : texte blanc non souligné */
+        nav ul li a {
+            color: var(--nav-text);
+            text-decoration: none;
+        }
+        nav ul li a:visited {
+            color: var(--nav-text);
+        }
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        nav .contact {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+        nav .contact .phone {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        nav .contact .account {
+            border: 1px solid var(--accent);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+        .convention-hero {
+            background: url('Tesla Model Y.png') center/cover no-repeat;
+            position: relative;
+            color: #ffffff;
+            min-height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .convention-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .convention-hero h1 {
+            position: relative;
+            z-index: 1;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .convention-hero p {
+            position: relative;
+            z-index: 1;
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+        .convention-section {
+            padding: 2rem 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .convention-description {
+            flex: 1 1 50%;
+            min-width: 280px;
+        }
+        .convention-description h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .convention-description p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .convention-description ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        .convention-description ul li {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .convention-description ul li span.icon {
+            color: var(--accent);
+        }
+        .convention-upload {
+            flex: 1 1 40%;
+            min-width: 280px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .convention-upload h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+        .convention-upload label.upload-area {
+            border: 2px dashed #cccccc;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        .convention-upload label.upload-area input {
+            display: none;
+        }
+        /* Style quand un fichier est déposé */
+        .convention-upload label.upload-area.dragover {
+            background: rgba(0,0,0,0.05);
+            border-color: var(--accent);
+        }
+        /* Liste des fichiers sélectionnés */
+        .file-list div {
+            margin-top: 0.2rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        .convention-upload .upload-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <span class="brand">TAXI</span>
+            <span>Parisien</span>
+        </div>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="reserver.html">Réserver</a></li>
+            <li><a href="forfaits.html">Forfaits Aéroports</a></li>
+            <li class="active"><a href="conventionne.html">Transport conventionné</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="contact">
+            <div class="phone">06 87 26 00 46</div>
+        </div>
+    </nav>
+    <section class="convention-hero">
+        <div>
+            <h1>Transport conventionné (TAP)</h1>
+            <p>Bénéficiez d’un service agréé CPAM pour vos déplacements médicaux.</p>
+        </div>
+    </section>
+    <section class="convention-section">
+        <div class="convention-description">
+            <h2>Un service dédié à vos besoins de santé</h2>
+            <p>Nos taxis conventionnés assurent vos transports assis en toute sécurité vers les hôpitaux, cliniques et centres de soins. Disponible 24 h/24 et 7 j/7, notre service vous garantit ponctualité, confort et confidentialité.</p>
+            <ul>
+                <li><span class="icon">✔</span> Agrément CPAM pour la prise en charge par l’Assurance Maladie</li>
+                <li><span class="icon">✔</span> Véhicules adaptés, confortables et accessibles</li>
+                <li><span class="icon">✔</span> Chauffeurs formés et bienveillants</li>
+                <li><span class="icon">✔</span> Disponibilité 24 h/24 et 7 j/7</li>
+            </ul>
+            <p>Pour toute demande de transport conventionné, merci de préparer les documents suivants :</p>
+            <ul>
+                <li><span class="icon"></span> Bon de transport (prescription médicale)</li>
+                <li><span class="icon"></span> Carte Vitale à jour</li>
+                <li><span class="icon"></span> Attestation de droits</li>
+            </ul>
+       
+    </script>
+</body>
+</html>

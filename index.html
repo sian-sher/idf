@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taxi Parisien – Réservation en ligne</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Palette de couleurs et variables pour un thème premium noir et doré */
+        :root {
+            --nav-bg: #0d0d0d;
+            --nav-text: #ffffff;
+            --accent: #d4a419; /* ton doré pour les boutons et surlignages */
+            --accent-hover: #bf8f0f;
+            --form-bg: rgba(0,0,0,0.65);
+            --section-bg: #f8f8f8;
+            --card-bg: #ffffff;
+            --card-border: #e2e2e2;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        body {
+            color: var(--text-primary);
+            background: var(--section-bg);
+            line-height: 1.5;
+        }
+
+        /* Barre de navigation */
+        nav {
+            background: var(--nav-bg);
+            color: var(--nav-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        nav .logo span.brand {
+            display: block;
+            font-size: 1.4rem;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav li {
+            cursor: pointer;
+            position: relative;
+            font-size: 0.95rem;
+        }
+        nav li.active::after {
+            content: "";
+            position: absolute;
+            bottom: -0.3rem;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: var(--accent);
+        }
+        /* Style des liens de navigation : texte blanc non souligné */
+        nav ul li a {
+            color: var(--nav-text);
+            text-decoration: none;
+        }
+        nav ul li a:visited {
+            color: var(--nav-text);
+        }
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        nav .contact {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+        nav .contact .phone {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        nav .contact .account {
+            border: 1px solid var(--accent);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        /* Section héros avec image de fond */
+        .hero {
+            /* Héros contenant une image de voiture comme arrière‑plan via une balise img */
+            position: relative;
+            color: #ffffff;
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+        /* Image de fond pour la section héros */
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: brightness(0.8);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .hero-left {
+            flex: 1 1 40%;
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+
+        .hero-form {
+            flex: 1 1 45%;
+            max-width: 480px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .hero-left h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .hero-left h1 span {
+            display: block;
+            font-weight: normal;
+        }
+        .hero-left h1 strong {
+            color: var(--accent);
+        }
+        .hero-left p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: #e0e0e0;
+        }
+        .booking-card {
+            background: var(--form-bg);
+            border-radius: 10px;
+            padding: 1.2rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+        .booking-card form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem 0.8rem;
+        }
+        .booking-card label {
+            font-size: 0.75rem;
+            color: #bbbbbb;
+            margin-bottom: 0.2rem;
+        }
+        .booking-card input,
+        .booking-card select {
+            width: 100%;
+            padding: 0.45rem 0.6rem;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.08);
+            color: #ffffff;
+            font-size: 0.85rem;
+        }
+
+        /* Icônes dans les champs du formulaire */
+        .booking-card .form-group {
+            position: relative;
+        }
+        .booking-card .form-group .field-icon {
+            position: absolute;
+            left: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+        .booking-card .form-group input,
+        .booking-card .form-group select {
+            padding-left: 1.8rem;
+        }
+        .booking-card input::placeholder {
+            color: #888;
+        }
+        .booking-card select {
+            appearance: none;
+        }
+        .swap-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid #444;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            color: var(--accent);
+            font-size: 1rem;
+        }
+        .booking-card .full-row {
+            grid-column: span 2;
+        }
+        .booking-card button {
+            grid-column: span 2;
+            padding: 0.7rem;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .booking-card button:hover {
+            background: var(--accent-hover);
+        }
+        .payment-info {
+            margin-top: 0.6rem;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #cccccc;
+        }
+        .payment-info span.icons {
+            margin-left: auto;
+        }
+        /* Bandeau d’avantages intégré au héros */
+        .hero-features {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            padding: 1.2rem 1rem;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+        }
+        .hero-features .feature-item {
+            flex: 1 1 200px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: #f5f5f5;
+            min-width: 180px;
+        }
+        .hero-features .feature-item span.icon {
+            font-size: 1.4rem;
+            color: var(--accent);
+        }
+        .hero-features .feature-item .title {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .hero-features .feature-item .subtitle {
+            display: block;
+            font-size: 0.7rem;
+            color: #dcdcdc;
+        }
+
+        /* Section forfaits aéroports et transport conventionné */
+        .info-sections {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2rem 1rem;
+            background: var(--section-bg);
+            gap: 2rem;
+        }
+        .airport-container {
+            flex: 1 1 55%;
+            min-width: 300px;
+        }
+        .airport-container h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            gap: 0.5rem;
+        }
+        .airport-cards {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin-bottom: 1rem;
+        }
+        .airport-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .airport-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+        .airport-card p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .airport-card .price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        .airport-card .arrow {
+            margin-left: auto;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-size: 0.9rem;
+        }
+        .airport-container .note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Boutique bouton pour voir tous les forfaits */
+        .view-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+            color: var(--accent);
+            cursor: pointer;
+        }
+        .view-all span.icon {
+            font-size: 0.9rem;
+        }
+
+        .convention-container {
+            flex: 1 1 40%;
+            min-width: 300px;
+        }
+        .convention-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .convention-card h2 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .convention-card ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .convention-card ul li {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .convention-card ul li span.icon {
+            color: var(--accent);
+        }
+        .convention-card .upload-area {
+            border: 2px dashed #cccccc;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+        .convention-card .upload-area input {
+            display: none;
+        }
+        /* Mise en évidence de la zone de dépôt lors du glisser-déposer */
+        .convention-card .upload-area.dragover {
+            background: rgba(0, 0, 0, 0.1);
+            border-color: var(--accent);
+        }
+        /* Liste des fichiers sélectionnés */
+        .file-list div {
+            margin-top: 0.2rem;
+            font-size: 0.75rem;
+            color: #cccccc;
+        }
+        .convention-card .upload-note {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 900px) {
+            .hero-content {
+                padding: 3rem 4rem;
+            }
+            .booking-card form {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .convention-card {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Services de transport médical */
+        .services-section {
+            background: var(--section-bg);
+            padding: 2rem 1rem;
+        }
+        .services-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        .services-cards {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.6rem;
+        }
+        .service-card span.icon {
+            font-size: 1.6rem;
+            color: var(--accent);
+        }
+        .service-card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        .service-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Pourquoi choisir notre service */
+        .why-section {
+            background: var(--section-bg);
+            padding: 2rem 1rem;
+        }
+        .why-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .why-cards {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        .why-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .why-card span.icon {
+            font-size: 1.6rem;
+            color: var(--accent);
+        }
+        .why-card h3 {
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        .why-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+.booking-card input::placeholder {
+    color: #ffffff !important;
+    opacity: 1;
+    font-weight: 600;
+}
+/* Couleur des propositions dans les menus déroulants */
+select option {
+    color: #000;
+    background-color: #fff;
+}
+/* Style du titre "taxi prenium" */
+.hero-left h1 strong {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-transform: uppercase;
+}
+/* Style du titre "Réservez votre" */
+.hero-left h1 span {
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: 2.7rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+</style>
+</head>
+<body>
+    <!-- Barre de navigation -->
+    <nav>
+        <div class="logo">
+            <!-- Icône simple pour le logo, peut être remplacée par une image -->
+            <span class="brand">TAXI</span>
+            <span>Parisien</span>
+        </div>
+        <ul>
+            <li class="active"><a href="index.html">Accueil</a></li>
+            <li><a href="reserver.html">Réserver</a></li>
+            <li><a href="forfaits.html">Forfaits Aéroports</a></li>
+            <li><a href="conventionne.html">Transport conventionné</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="contact">
+            <div class="phone">06 87 26 00 46</div>
+        </div>
+    </nav>
+
+    <!-- Héros -->
+    <section class="hero">
+        <!-- Image de fond pour la section héros. Veillez à placer votre photo de voiture dans le même dossier que ce fichier HTML -->
+        <img src="Tesla Model Y.png" alt="Voiture de taxi" class="hero-bg" />
+        <div class="hero-content">
+            <!-- Colonne gauche : titre et descriptif -->
+            <div class="hero-left">
+                <h1><span>Réservez votre</span><strong> taxi prenium</strong></h1>
+                <p>Voyagez en tout confort et ponctualité.</p>
+            </div>
+            <!-- Colonne droite : formulaire de réservation -->
+            <div class="hero-form">
+                <div class="booking-card">
+                    <form id="bookingForm">
+                        <div class="form-group">
+                            <label for="pickup">Départ</label>
+                            <input type="text" id="pickup" name="pickup" placeholder="Adresse, gare, hôtel, aéroport…" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="dropoff">Arrivée</label>
+                            <input type="text" id="dropoff" name="dropoff" placeholder="Adresse, gare, hôtel, aéroport…" required />
+                        </div>
+                        <div class="swap-btn" onclick="swapLocations()">⇄</div>
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Heure</label>
+                            <input type="time" id="time" name="time" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="passengers">Passagers</label>
+                            <input type="number" id="passengers" name="passengers" min="1" max="8" value="1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="vehicle">Type de véhicule</label>
+                            <select id="vehicle" name="vehicle">
+                                <option value="model-y">Tesla Model Y</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reservationType">Type de réservation</label>
+                            <select id="reservationType" name="reservationType">
+                                <option value="none">Aller simple</option>
+                                <option value="immediate">Réservation immédiate (+4 €)</option>
+                                <option value="advance">Réservation à l’avance (+7 €)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="serviceType">Service</label>
+                            <select id="serviceType" name="serviceType">
+                                <option value="normal">Taxi classique</option>
+                                <option value="conventionne">Transport conventionné (TAP)</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-row">
+                            <label for="airportOption">Forfait Aéroport (optionnel)</label>
+                            <select id="airportOption" name="airportOption">
+                                <option value="">Sélectionner un aéroport</option>
+                                <option value="cdg-rive-droite">CDG rive droite – 56 €</option>
+                                <option value="cdg-rive-gauche">CDG rive gauche – 65 €</option>
+                                <option value="orly-rive-droite">Orly rive droite – 45 €</option>
+                                <option value="orly-rive-gauche">Orly rive gauche – 36 €</option>
+                            </select>
+                        </div>
+                        <div id="conventionneUploads" class="form-group full-row" style="display:none;">
+                            <label>Pièces TAP</label>
+                            <input type="file" id="bonTransport" name="bonTransport" accept=".pdf,image/*" multiple />
+                        </div>
+                        <button type="submit">Réserver maintenant →</button>
+                    </form>
+                    <div class="payment-info">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Bandeau d'avantages intégré au héros -->
+        <div class="hero-features">
+            <div class="feature-item"><span class="icon"></span><div><span class="title">Ponctualité</span><span class="subtitle">Priorité absolue</span></div></div>
+            <div class="feature-item"><span class="icon"></span><div><span class="title">Véhicules premium</span><span class="subtitle">Confort & élégance</span></div></div>
+            <div class="feature-item"><span class="icon"></span><div><span class="title">Chauffeurs</span><span class="subtitle">Expérimentés</span></div></div>
+            <div class="feature-item"><span class="icon"></span><div><span class="title">Trajets sécurisés</span><span class="subtitle">En toute sérénité</span></div></div>
+        </div>
+    </section>
+
+    <!-- Sections forfaits aéroports et transport conventionné -->
+    <section class="info-sections">
+        <!-- Colonne des forfaits aéroports -->
+        <div class="airport-container">
+            <h2>Forfaits Aéroports</h2>
+            <div class="airport-cards">
+                <div class="airport-card">
+                    <h3>CDG<br><small>rive droite</small></h3>
+                    <p>Jusqu’à 4 passagers et 4 bagages</p>
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <span class="price">56 € TTC</span>
+                        <!-- Lien WhatsApp pour le forfait CDG rive droite -->
+                        <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20CDG%20rive%20droite%20%E2%80%93%2056%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                    </div>
+                </div>
+                <div class="airport-card">
+                    <h3>CDG<br><small>rive gauche</small></h3>
+                    <p>Jusqu’à 4 passagers et 4 bagages</p>
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <span class="price">65 € TTC</span>
+                        <!-- Lien WhatsApp pour le forfait CDG rive gauche -->
+                        <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20CDG%20rive%20gauche%20%E2%80%93%2065%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                    </div>
+                </div>
+                <div class="airport-card">
+                    <h3>Orly<br><small>rive droite</small></h3>
+                    <p>Jusqu’à 4 passagers et 4 bagages</p>
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <span class="price">45 € TTC</span>
+                        <!-- Lien WhatsApp pour le forfait Orly rive droite -->
+                        <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20Orly%20rive%20droite%20%E2%80%93%2045%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                    </div>
+                </div>
+                <div class="airport-card">
+                    <h3>Orly<br><small>rive gauche</small></h3>
+                    <p>Jusqu’à 4 passagers et 4 bagages</p>
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <span class="price">36 € TTC</span>
+                        <!-- Lien WhatsApp pour le forfait Orly rive gauche -->
+                        <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20Orly%20rive%20gauche%20%E2%80%93%2036%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                    </div>
+                </div>
+            </div>
+            <p class="note">Sous réserve de disponibilité.</p>
+            <a class="view-all" href="forfaits.html">Voir tous les forfaits <span class="icon">→</span></a>
+        </div>
+       </section>             
+
+<!-- Section pourquoi choisir notre service -->
+<section class="why-section">
+    <h2>Pourquoi choisir notre service&nbsp;?</h2>
+
+    <div class="why-cards" style="display: flex; flex-direction: row; gap: 16px; overflow-x: auto;">
+
+        <div class="why-card" style="min-width: 220px; flex: 0 0 auto;">
+            <h3>Agrément CPAM</h3>
+            <p>Véhicules conventionnés et agréés pour une prise en charge optimale.</p>
+        </div>
+
+        <div class="why-card" style="min-width: 220px; flex: 0 0 auto;">
+            <h3>Ponctualité garantie</h3>
+            <p>Nous respectons vos horaires de rendez-vous médicaux.</p>
+        </div>
+
+        <div class="why-card" style="min-width: 220px; flex: 0 0 auto;">
+            <h3>Confort & accessibilité</h3>
+            <p>Voitures équipées pour le confort et l’accessibilité des patients.</p>
+        </div>
+
+    </div>
+</section>
+
+    <!-- Script de fonctionnalité (prix et affichage dynamique) -->
+    <script>
+        // Prix forfaitaires pour les aéroports et suppléments de réservation【214758718063068†L145-L151】【214758718063068†L126-L132】
+        const forfaitPrices = {
+            'cdg-rive-droite': 56,
+            'cdg-rive-gauche': 65,
+            'orly-rive-droite': 45,
+            'orly-rive-gauche': 36
+        };
+        const reservationFees = {
+            'none': 0,
+            'immediate': 4,
+            'advance': 7
+        };
+        function calculatePrice() {
+            const airportOption = document.getElementById('airportOption').value;
+            const reservationType = document.getElementById('reservationType').value;
+            const reservationFee = reservationFees[reservationType] || 0;
+            if (airportOption && forfaitPrices[airportOption]) {
+                return (forfaitPrices[airportOption] + reservationFee).toFixed(2);
+            }
+            const passengers = parseInt(document.getElementById('passengers').value, 10) || 1;
+            const vehicle = document.getElementById('vehicle').value;
+            let baseFare = 5;
+            let perPassenger = 2;
+            let vehicleMultiplier = 1;
+            switch (vehicle) {
+                case 'standard':
+                    vehicleMultiplier = 1;
+                    break;
+                case 'berline':
+                    vehicleMultiplier = 1.2;
+                    break;
+                case 'van':
+                    vehicleMultiplier = 1.5;
+                    break;
+                case 'luxury':
+                    vehicleMultiplier = 2;
+                    break;
+                case 'model-y':
+                    vehicleMultiplier = 2.2;
+                    break;
+                default:
+                    vehicleMultiplier = 1;
+            }
+            let dynamicPrice = (baseFare + (perPassenger * passengers)) * vehicleMultiplier;
+            dynamicPrice += reservationFee;
+            return dynamicPrice.toFixed(2);
+        }
+        function swapLocations() {
+            const pickup = document.getElementById('pickup');
+            const dropoff = document.getElementById('dropoff');
+            const temp = pickup.value;
+            pickup.value = dropoff.value;
+            dropoff.value = temp;
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const serviceSelect = document.getElementById('serviceType');
+            const convUploads = document.getElementById('conventionneUploads');
+            serviceSelect.addEventListener('change', () => {
+                if (serviceSelect.value === 'conventionne') {
+                    convUploads.style.display = 'block';
+                } else {
+                    convUploads.style.display = 'none';
+                }
+            });
+            // Lors de la soumission du formulaire, construire un message et rediriger vers WhatsApp.
+            document.getElementById('bookingForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Numéro WhatsApp du chauffeur en format international (sans espaces ni symbole +)
+                const phone = '33687260046';
+                // Récupération des valeurs saisies par l'utilisateur
+                const pickup = document.getElementById('pickup').value.trim();
+                const dropoff = document.getElementById('dropoff').value.trim();
+                const date = document.getElementById('date').value;
+                const time = document.getElementById('time').value;
+                const passengers = document.getElementById('passengers').value;
+                const vehicle = document.getElementById('vehicle').options[document.getElementById('vehicle').selectedIndex].text;
+                const reservationType = document.getElementById('reservationType').options[document.getElementById('reservationType').selectedIndex].text;
+                const serviceType = document.getElementById('serviceType').options[document.getElementById('serviceType').selectedIndex].text;
+                const airportOption = document.getElementById('airportOption').options[document.getElementById('airportOption').selectedIndex].text;
+                // Construction du message
+                let message = `Bonjour, je souhaite réserver un taxi.\n`;
+                message += `Départ : ${pickup}\n`;
+                message += `Arrivée : ${dropoff}\n`;
+                message += `Date : ${date}\n`;
+                message += `Heure : ${time}\n`;
+                message += `Passagers : ${passengers}\n`;
+                message += `Véhicule : ${vehicle}\n`;
+                message += `Type de réservation : ${reservationType}\n`;
+                message += `Service : ${serviceType}`;
+                if (airportOption && airportOption !== 'Sélectionner un aéroport') {
+                    message += `\nForfait aéroport : ${airportOption}`;
+                }
+                if (serviceType.toLowerCase().includes('convention')) {
+                    // Indiquer au conducteur que des documents seront envoyés séparément
+                    message += `\n(Pièces TAP jointes séparément)`;
+                }
+                // Encodage de l'URL pour respecter la syntaxe WhatsApp【448686546422049†L115-L140】
+                const encodedMessage = encodeURIComponent(message);
+                // Création de l'URL wa.me. Lien dans un nouvel onglet pour éviter de quitter le site.
+                const whatsappURL = `https://wa.me/${phone}?text=${encodedMessage}`;
+                window.open(whatsappURL, '_blank');
+                // Réinitialiser le formulaire après avoir ouvert le lien
+                this.reset();
+            });
+
+            /* Gestion de la zone de dépôt de fichiers pour le transport conventionné
+               Lorsque des fichiers sont sélectionnés via la boîte de dialogue ou déposés
+               en glisser-déposer, leurs noms sont affichés sous la zone de dépôt. */
+            const convInput = document.getElementById('conventionFiles');
+            const convList = document.getElementById('conventionFileList');
+            const convArea = document.querySelector('.convention-card .upload-area');
+
+            function updateConvList(files) {
+                if (!files || files.length === 0) {
+                    convList.innerHTML = '';
+                    return;
+                }
+                const names = [];
+                for (let i = 0; i < files.length; i++) {
+                    names.push(`<div>📄 ${files[i].name}</div>`);
+                }
+                convList.innerHTML = names.join('');
+            }
+            if (convInput && convArea) {
+                convInput.addEventListener('change', function() {
+                    updateConvList(this.files);
+                });
+                convArea.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                convArea.addEventListener('dragleave', function() {
+                    this.classList.remove('dragover');
+                });
+                convArea.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    convInput.files = e.dataTransfer.files;
+                    updateConvList(convInput.files);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

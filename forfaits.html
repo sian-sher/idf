@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taxi Parisien – Forfaits Aéroports</title>
+    <style>
+        :root {
+            --nav-bg: #0d0d0d;
+            --nav-text: #ffffff;
+            --accent: #d4a419;
+            --accent-hover: #bf8f0f;
+            --section-bg: #f8f8f8;
+            --card-bg: #ffffff;
+            --card-border: #e2e2e2;
+            --text-primary: #1a1a1a;
+            --text-secondary: #555;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        body {
+            color: var(--text-primary);
+            background: var(--section-bg);
+            line-height: 1.5;
+        }
+        nav {
+            background: var(--nav-bg);
+            color: var(--nav-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.25rem;
+        }
+        nav .logo span.brand {
+            display: block;
+            font-size: 1.4rem;
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+        nav li {
+            position: relative;
+            font-size: 0.95rem;
+        }
+        nav li.active::after {
+            content: "";
+            position: absolute;
+            bottom: -0.3rem;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: var(--accent);
+        }
+        /* Style des liens de navigation : texte blanc non souligné */
+        nav ul li a {
+            color: var(--nav-text);
+            text-decoration: none;
+        }
+        nav ul li a:visited {
+            color: var(--nav-text);
+        }
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        nav .contact {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+        nav .contact .phone {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        nav .contact .account {
+            border: 1px solid var(--accent);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+        .forfait-hero {
+            background: url('Tesla Model Y.png') center/cover no-repeat;
+            position: relative;
+            color: #ffffff;
+            min-height: 50vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .forfait-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .forfait-hero h1 {
+            position: relative;
+            z-index: 1;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .forfait-hero p {
+            position: relative;
+            z-index: 1;
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+        .forfaits-section {
+            padding: 2rem 1rem;
+        }
+        .forfaits-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            text-align: center;
+        }
+        .airport-cards {
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            margin-bottom: 1rem;
+        }
+        .airport-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .airport-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .airport-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .airport-card .price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        .airport-card .arrow {
+            margin-left: auto;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-size: 0.9rem;
+        }
+        .note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <span class="brand">TAXI</span>
+            <span>Parisien</span>
+        </div>
+        <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="reserver.html">Réserver</a></li>
+            <li class="active"><a href="forfaits.html">Forfaits Aéroports</a></li>
+            <li><a href="conventionne.html">Transport conventionné</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="contact">
+            <div class="phone"> 06 87 26 00 46</div>
+        </div>
+    </nav>
+    <section class="forfait-hero">
+        <div>
+        <h1>Forfaits Aéroports</h1>
+        <p>Tarifs réglementés pour vos transferts vers CDG et Orly</p>
+	</div>
+
+    </section>
+    <section class="forfaits-section">
+        <h2>Nos tarifs forfaitaires</h2>
+        <div class="airport-cards">
+            <div class="airport-card">
+                <h3>CDG&nbsp;– Rive droite</h3>
+                <p>Trajet direct entre Paris rive droite et l'aéroport Charles‑de‑Gaulle, jusqu’à 4 passagers et 4 bagages.</p>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span class="price">56 € TTC</span>
+                    <!-- Lien WhatsApp pour le forfait CDG rive droite -->
+                    <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20CDG%20rive%20droite%20%E2%80%93%2056%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                </div>
+            </div>
+            <div class="airport-card">
+                <h3>CDG&nbsp;– Rive gauche</h3>
+                <p>Trajet direct entre Paris rive gauche et l'aéroport Charles‑de‑Gaulle, jusqu’à 4 passagers et 4 bagages.</p>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span class="price">65 € TTC</span>
+                    <!-- Lien WhatsApp pour le forfait CDG rive gauche -->
+                    <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20CDG%20rive%20gauche%20%E2%80%93%2065%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                </div>
+            </div>
+            <div class="airport-card">
+                <h3>Orly&nbsp;– Rive droite</h3>
+                <p>Trajet direct entre Paris rive droite et l'aéroport d'Orly, jusqu’à 4 passagers et 4 bagages.</p>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span class="price">45 € TTC</span>
+                    <!-- Lien WhatsApp pour le forfait Orly rive droite -->
+                    <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20Orly%20rive%20droite%20%E2%80%93%2045%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                </div>
+            </div>
+            <div class="airport-card">
+                <h3>Orly&nbsp;– Rive gauche</h3>
+                <p>Trajet direct entre Paris rive gauche et l'aéroport d'Orly, jusqu’à 4 passagers et 4 bagages.</p>
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span class="price">36 € TTC</span>
+                    <!-- Lien WhatsApp pour le forfait Orly rive gauche -->
+                    <a class="arrow" href="https://wa.me/33687260046?text=Bonjour%2C%20je%20souhaite%20r%C3%A9server%20un%20forfait%20a%C3%A9roport%20Orly%20rive%20gauche%20%E2%80%93%2036%20%E2%82%AC%20TTC." target="_blank" title="Réserver ce forfait via WhatsApp">→</a>
+                </div>
+            </div>
+        </div>
+        <p class="note">Tarifs en vigueur à partir du 21 janvier 2026 – sous réserve de disponibilité.</p>
+    </section>
+</body>
+</html>
