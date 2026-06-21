@@ -210,6 +210,59 @@ nav ul li a:visited {
 nav ul li a:hover {
     color: var(--accent);        /* passe en doré au survol */
 }
+        @media (max-width: 768px) {
+    html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    nav {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px 18px;
+    }
+
+    nav li {
+        white-space: nowrap;
+    }
+
+    .contact-section {
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        padding: 25px 15px;
+        overflow-x: hidden;
+    }
+
+    .contact-details,
+    .contact-form {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .contact-form input,
+    .contact-form textarea,
+    .contact-form button {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .contact-hero h1 {
+        font-size: 2rem !important;
+        line-height: 1.1;
+    }
+
+    .contact-hero p {
+        font-size: 0.95rem;
+    }
+}
     </style>
 </head>
 <body>
