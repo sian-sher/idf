@@ -562,6 +562,93 @@ select option {
     font-weight: 600;
     letter-spacing: 0.5px;
     color: #ffffff;
+    /* Version téléphone */
+@media (max-width: 768px) {
+
+    nav {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0;
+    }
+
+    .hero-content {
+        flex-direction: column;
+        padding: 1.5rem 1rem;
+        align-items: center;
+    }
+
+    .hero-left {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .hero-left h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-left h1 span {
+        font-size: 2rem;
+    }
+
+    .hero-left h1 strong {
+        font-size: 2.5rem;
+    }
+
+    .hero-form {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+    }
+
+    .booking-card {
+        max-width: 100%;
+    }
+
+    .booking-card form {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-card .full-row,
+    .booking-card button {
+        grid-column: span 1;
+    }
+
+    .info-sections {
+        flex-direction: column;
+        padding: 1.5rem 1rem;
+    }
+
+    .airport-container,
+    .convention-container {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .airport-cards,
+    .services-cards,
+    .why-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .convention-card {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-features {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .feature-item {
+        width: 100%;
+    }
+}
 </style>
 </head>
 <body>
