@@ -185,6 +185,53 @@
             font-size: 0.8rem;
             color: var(--text-secondary);
         }
+		@media (max-width: 768px) {
+    html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    nav {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px 18px;
+    }
+
+    nav li {
+        white-space: nowrap;
+    }
+
+    .forfaits-section {
+        width: 100%;
+        max-width: 100%;
+        padding: 25px 15px;
+        overflow-x: hidden;
+    }
+
+    .airport-cards {
+        grid-template-columns: 1fr !important;
+    }
+
+    .airport-card {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .forfait-hero h1 {
+        font-size: 2rem !important;
+        line-height: 1.1;
+    }
+
+    .forfait-hero p {
+        font-size: 0.95rem;
+    }
+}
     </style>
 </head>
 <body>
